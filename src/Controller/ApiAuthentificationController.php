@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 final class ApiAuthentificationController extends AbstractController
 {
-    #[Route('/api/register', name: 'app_register', methods: 'POST')]
+    #[Route('/api/register', name: 'api_register', methods: ['POST'])]
     public function apiRegister(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, SerializerInterface $serializer, UserRepository $userRepository): Response
     {
         $user = $serializer->deserialize($request->getContent(),User::class, 'json');
