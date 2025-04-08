@@ -22,6 +22,9 @@ class CartItem
     #[ORM\ManyToOne(inversedBy: 'items')]
     private ?Cart $cart = null;
 
+    #[ORM\ManyToOne(inversedBy: 'items')]
+    private ?Order $theOrder = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +62,18 @@ class CartItem
     public function setCart(?Cart $cart): static
     {
         $this->cart = $cart;
+
+        return $this;
+    }
+
+    public function getTheOrder(): ?Order
+    {
+        return $this->theOrder;
+    }
+
+    public function setTheOrder(?Order $theOrder): static
+    {
+        $this->theOrder = $theOrder;
 
         return $this;
     }
