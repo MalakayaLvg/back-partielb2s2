@@ -28,16 +28,21 @@ class SecurityAuthenticator extends AbstractLoginFormAuthenticator
 
     public function authenticate(Request $request): Passport
     {
-        $username = $request->getPayload()->getString('username');
+        // Récupération des données du formulaire
+        $username = $request->request->get('username');
+        $password = $request->request->get('password');
+        $csrfToken = $request->request->get('_csrf_token');
 
+        // Stocke le dernier nom d'utilisateur dans la session
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $username);
 
+        // Retourne un Passport avec la validation du token CSRF
         return new Passport(
             new UserBadge($username),
-            new PasswordCredentials($request->getPayload()->getString('password')),
+            new PasswordCredentials($password),
             [
-                new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')),
-                new RememberMeBadge(),
+                new CsrfTokenBadge('authenticate', $csrfToken), // Vérifie le token CSRF
+                new RememberMeBadge(), // Active la fonctionnalité "se souvenir de moi"
             ]
         );
     }
@@ -48,9 +53,7 @@ class SecurityAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        // For example:
-         return new RedirectResponse($this->urlGenerator->generate('app_home'));
-//        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        return new RedirectResponse($this->urlGenerator->generate('app_home'));
     }
 
     protected function getLoginUrl(Request $request): string
