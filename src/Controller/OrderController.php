@@ -51,4 +51,53 @@ final class OrderController extends AbstractController
 
         return $this->json(["message" => "order successfully validate",$order] , 200, [] ,["groups"=>["order"]]);
     }
+
+    #[Route('/api/order/all', methods: ['GET'])]
+    public function getAllOrders(OrderRepository $orderRepository): Response
+    {
+        $orders = $orderRepository->findAll();
+
+        return $this->json(
+            ['orders' => $orders],
+            200,
+            [],
+            ['groups' => ['order']]
+        );
+    }
+
+    #[Route('/api/order/{id}', methods: ['GET'])]
+    public function getOrderById(int $id, OrderRepository $orderRepository): Response
+    {
+        $order = $orderRepository->find($id);
+
+        if (!$order) {
+            return $this->json(['error' => 'Commande non trouvée'], 404);
+        }
+
+        return $this->json(
+            $order,
+            200,
+            [],
+            ['groups' => ['order']]
+        );
+    }
+
+    #[Route('/api/user/orders', methods: ['GET'])]
+    public function getUserOrders(OrderRepository $orderRepository): Response
+    {
+        $user = $this->getUser();
+
+        if (!$user) {
+            return $this->json(['error' => 'Utilisateur non authentifié'], 401);
+        }
+
+        $orders = $orderRepository->findBy(['customer' => $user]);
+
+        return $this->json(
+            ['orders' => $orders],
+            200,
+            [],
+            ['groups' => ['order']]
+        );
+    }
 }
