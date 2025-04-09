@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\CartItemRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: CartItemRepository::class)]
 class CartItem
@@ -14,9 +15,11 @@ class CartItem
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(["order"])]
     private ?int $quantity = null;
 
     #[ORM\ManyToOne(targetEntity: Product::class, inversedBy: 'cartItems')]
+    #[Groups(["order"])]
     private ?Product $product = null;
 
     #[ORM\ManyToOne(inversedBy: 'items')]

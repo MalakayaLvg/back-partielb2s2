@@ -39,6 +39,8 @@ final class OrderController extends AbstractController
         $order = new Order();
         $order->setTotalAmount($totalPrice);
         $order->setCustomer($cart->getCustomer());
+        $order->setCreatedAt(new \DateTime());
+        $order->setStatus("pending");
         foreach ($cart->getItems() as $item) {
             $order->addItem($item);
             $item->setTheOrder($order);
@@ -47,6 +49,6 @@ final class OrderController extends AbstractController
         $em->persist($order);
         $em->flush();
 
-        return $this->json(['message' => 'Commande validée', 'orderId' => $order->getId()]);
+        return $this->json(["message" => "order successfully validate",$order] , 200, [] ,["groups"=>["order"]]);
     }
 }
