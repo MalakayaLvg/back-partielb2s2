@@ -2,3 +2,4 @@ endroid/qr-code
 symfony/security-bundle
 "lexik/jwt-authentication-bundle"
 dompdf/dompdf
+nelmio/cors-bundle
