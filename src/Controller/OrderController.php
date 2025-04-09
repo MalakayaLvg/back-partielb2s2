@@ -65,7 +65,7 @@ final class OrderController extends AbstractController
         );
     }
 
-    #[Route('/api/order/{id}', methods: ['GET'])]
+    #[Route('/api/order/{id}',name: 'app_order_all', methods: ['GET'])]
     public function getOrderById(int $id, OrderRepository $orderRepository): Response
     {
         $order = $orderRepository->find($id);
